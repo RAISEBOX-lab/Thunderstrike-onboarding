@@ -11,6 +11,8 @@ A ground-zero path to a productive contributor on the team's robot control softw
 | **Stack** | Java 8 · Android · FTC SDK |
 
 > **How to use this.** Work the phases in order — each assumes the one before it. The Git track runs in parallel: start it in Week 2 and use it for everything after. You are not expected to master a topic before moving on; you are expected to be able to *follow along* in the codebase. Pair with your assigned mentor early and often. On-robot testing is done by the Product Owner — your loop is write, build, get reviewed.
+>
+> **Ainda a aprender inglês?** Há uma [Trilha em Português](#trilha-em-português) mais abaixo.
 
 **Track legend:** **Core** = the main sequence · **Parallel** = runs alongside the core.
 
@@ -41,7 +43,7 @@ The whole codebase is Java. Learn the language, then the object-oriented model (
 
 - **[Learn Java Programming (v17)](https://youtu.be/A74TOX803D0)** — *video · 4h · freeCodeCamp.* One sitting, no signup: variables through arrays, ending in OOP. Watch first.
 - **[Learn Java](https://www.codecademy.com/learn/learn-java)** — *interactive · ~17h · Codecademy (free course).* Hands-on; the OOP unit has you write your own classes, which is where it sticks. Ignore the Pro upsell.
-- **[Learn Java for FTC](https://github.com/alan412/LearnJavaForFTC)** *(free PDF)* — *book · self-paced · Alan G. Smith.* The bridge: Java taught through motors, servos, sensors, gamepads, and OpModes. Read as you enter Phase 5.
+- **[Learn Java for FTC](https://raw.githubusercontent.com/alan412/LearnJavaForFTC/master/LearnJavaForFTC.pdf)** *(free PDF — direct download)* — *book · self-paced · Alan G. Smith.* The bridge: Java taught through motors, servos, sensors, gamepads, and OpModes. Read as you enter Phase 5.
 
 ### Phase 3 — Git & GitHub
 *From Week 2 · ~3–4h · Parallel*
@@ -82,14 +84,14 @@ Now the domain: how FTC robot code is structured (OpModes, hardware mapping, gam
 - **[Get Started with Pedro Pathing](https://www.youtube.com/watch?v=6v7QgzRhOwA)** + **[docs](https://pedropathing.com/)** — *video + docs · Pedro Pathing.* Our autonomous path-following library. The Nov 2025 setup video matches our version.
 - **[NextFTC Guide](https://nextftc.dev/guide/about)** — *docs · ~1–2h · NextFTC (official).* Our command-based library. Documentation-first (no video series yet); code-along in Java.
 
-> **Our versions.** FTC SDK `11.0.0` · Pedro Pathing `2.0.5` · NextFTC `1.1.0`. When docs and our code disagree, our pinned version wins — read the source for the version we use.
+> **Our versions.** FTC SDK `11.1.0` · Pedro Pathing `2.0.5` · NextFTC `1.1.0`. When docs and our code disagree, our pinned version wins — read the source for the version we use.
 
 ### Phase 6 — Our Codebase & First PR
 *Weeks 5–6 · ongoing · Core*
 
 Turn general knowledge into *this* robot. Learn how our software is organized, our rules, and then ship a small change end to end.
 
-- **Architecture: the control loop & coordinate systems** — *read · 2h · README § Software Architecture.* The 50 Hz five-phase state-machine loop, the subsystems, and FTC (mm/degrees) vs Pedro (inches/radians) coordinates.
+- **Architecture: the control loop & coordinate systems** — *read · 2h · README § Software Architecture.* The 50 Hz five-phase state-machine loop, the subsystems, and FTC (mm/degrees) vs Pedro (inches/radians) coordinates. You work in the newer NextFTC command-based, modular-subsystem code — each subsystem is its own class. An older single-file design still lives in the repo, but it's legacy; new work doesn't go there.
 - **Coding Conventions** — *read · 30m · README § Coding Conventions.* No-allocation hot paths, no magic numbers, short single-purpose methods, comprehensive comments.
 - **Real-time constraints (advanced)** — *read · advanced · README § Performance.* Why we avoid creating objects and doing extra hub reads inside the ~50 Hz loop: object creation causes stutter-inducing garbage-collection pauses, and each hub read is a slow round-trip. Save this for after your first PR.
 - **The PBI lifecycle & Definition of Done** — *read · 30m · `doc/engineering-process.md`.* How work flows: code changes happen only in the Implementation stage; a PR isn't done until the PO accepts it.
@@ -112,13 +114,81 @@ The ideas the codebase is built on. Dip into these while working through Phases 
 
 ---
 
-## What Else Is Missing — Proposals
+## Trilha em Português
 
-These aren't in the generic courses above but a team contributor needs them. Fold them into the phases or run them as short mentor-led sessions.
+Quase todos os recursos estão em **português do Brasil (PT-BR)**: a pronúncia difere do português europeu, mas o conteúdo serve na perfeição. Nada aqui é uma tradução ou cópia dos materiais em inglês — são recursos já publicados em português. Onde não existe conteúdo em português, fica indicado que se deve usar a fase equivalente em inglês.
 
-1. **FTC field geometry & frames** — The field coordinate system, our mm/degree convention, and where the season's field elements sit. Read the README coordinate section with the field diagrams open.
-2. **Mentorship & review etiquette** — Assign a mentor on Day 1, pair on the first PBI, and set expectations for giving and receiving code review kindly and specifically.
-3. **Access checklist** — One list to grant everything: GitHub org invite, ClickUp board, team chat, and robot-lab access. Nothing blocks a new hire faster than missing access.
+### Fase 0 — Preparação e Orientação
+*Dia 1 · ~2–3h · Base*
+
+Instala as ferramentas e abre o projeto — ainda sem escrever código.
+
+- **[Instalar o Android Studio](https://developer.android.com/studio/install?hl=pt-br)** — *documentação · PT-BR · Google (oficial).* Instalação passo a passo. O JDK e o Git aprendem-se nos cursos das fases seguintes.
+- **Ler o README e o processo de engenharia da equipa** — *leitura · em inglês · no repositório.* Estes documentos da equipa só existem em inglês; usa a Fase 0 em inglês.
+
+### Fase 1 — Fundamentos de Programação
+*Semana 1 · ~8–12h · Base*
+
+O que é um programa — variáveis, condições, ciclos e funções — numa linguagem simples.
+
+- **[Java Básico](https://www.youtube.com/playlist?list=PLHz_AreHm4dkI2ZdjTwZA4mPMxWTfNSpR)** — *vídeo · PT-BR · Curso em Vídeo.* A linguagem Java de raiz, ao mesmo ritmo tranquilo.
+
+### Fase 2 — Java e Programação Orientada a Objetos
+*Semanas 2–3 · ~20–25h · Base*
+
+Todo o código é Java. Aprende a linguagem e depois o modelo de objetos.
+
+- **[Java — Programação Orientada a Objetos](https://www.youtube.com/playlist?list=PLHz_AreHm4dkqe2aR0tQK74m8SFe-aGsY)** — *vídeo · PT-BR · Curso em Vídeo.* Classes, objetos, herança e polimorfismo.
+- **[freeCodeCamp em Português](https://www.freecodecamp.org/portuguese/learn)** — *interativo · PT-BR · freeCodeCamp.* Exercícios práticos no navegador.
+- **[Learn Java for FTC](https://raw.githubusercontent.com/alan412/LearnJavaForFTC/master/LearnJavaForFTC.pdf)** *(PDF grátis)* — *livro · ao teu ritmo · Alan G. Smith.* A ponte: Java através de motores, servos, sensores, gamepad e OpModes. Só existe em inglês e não o podemos traduzir nem republicar; para estudo pessoal, transfere o PDF e envia-o ao tradutor de documentos do [Google Tradutor](https://translate.google.com) (translate.google.com → Documentos).
+
+### Fase 3 — Git e GitHub
+*A partir da Semana 2 · ~3–4h · Paralelo*
+
+Controlo de versões e o fluxo de pull request — como a equipa faz cada alteração.
+
+- **[Git e GitHub](https://www.cursoemvideo.com/curso/curso-de-git-e-github/)** — *vídeo · PT-BR · Curso em Vídeo (Gustavo Guanabara).* Repositórios, commits, ramos, push/clone e pull requests.
+- **[Fundamentos do GitHub](https://learn.microsoft.com/pt-pt/training/github/)** — *interativo · PT-PT · Microsoft Learn.* A única opção em português europeu (tradução automática), mas atual e gratuita.
+
+### Fase 4 — Android Studio, Implantação e Depuração
+*Semanas 3–4 · ~8–10h · Base*
+
+Compilar o código, enviá-lo para o Control Hub e ler os registos quando algo falha.
+
+- **[Começando com o Gradle](https://www.youtube.com/watch?v=uX6Ezf73OEY)** — *vídeo · PT-BR · Alura.* O que é o Gradle: tarefas e comandos básicos (por trás do `assembleDebug`).
+- **[Ligar ao Control Hub](https://docs.stemos.com.br/books/control-hub/page/conexao-ao-console-de-controlador-do-robo)** — *documentação · PT-BR · stemOS.* Ligar o computador ao Control Hub por USB e por Wi-Fi.
+- **[Ler registos com o Logcat](https://developer.android.com/studio/debug/am-logcat.html?hl=pt-br)** — *documentação · PT-BR · Google (oficial).* Abrir o Logcat, ler entradas e rastreios de erro, filtrar por nível.
+- **ADB da FTC e FTC Dashboard** — *só em inglês · sem versão em português.* Para o ADB específico da FTC e para o Dashboard, usa a Fase 4 em inglês.
+
+### Fase 5 — O Stack de Robótica da FTC
+*Semanas 4–5 · ~10–15h · Base*
+
+Como o código da FTC se organiza (OpModes, hardware, gamepad) e as bibliotecas do robô.
+
+- **[Learn Java for FTC](https://raw.githubusercontent.com/alan412/LearnJavaForFTC/master/LearnJavaForFTC.pdf)** *(PDF grátis)* — *livro · ao teu ritmo · Alan G. Smith.* Programação da FTC em Java: motores, servos, sensores, gamepad e OpModes. Só existe em inglês e não o podemos traduzir nem republicar; para estudo pessoal, transfere o PDF e envia-o ao tradutor de documentos do [Google Tradutor](https://translate.google.com) (translate.google.com → Documentos).
+- **[stemOS no YouTube](https://www.youtube.com/stemOS)** — *vídeo · PT-BR · stemOS.* Vídeos sobre o sistema de controlo e o hardware da FTC.
+- **Pedro Pathing, NextFTC e Game Manual 0** — *só em inglês · sem versão em português.* Para estes, usa a Fase 5 em inglês.
+
+### Fase 6 — O Nosso Código e o Primeiro PR
+*Semanas 5–6 · contínuo · Base*
+
+Arquitetura, convenções, testes e o teu primeiro pull request, com o teu mentor.
+
+- **O nosso código e documentos da equipa** — *só em inglês · no repositório.* Todo o material desta fase é o nosso código e está em inglês; segue a Fase 6 em inglês com o teu mentor.
+
+---
+
+## Conceitos de Software de Controlo
+
+Os conceitos por trás do código. Onde não existe recurso em português, fica indicado que se deve usar a versão em inglês.
+
+- **[O loop de controlo: sentir → decidir → agir](https://escolalbk.com.br/glossario/o-que-e-loop-de-controle/)** — *artigo · PT-BR · Escola LBK.* Ler sensores, decidir e depois atuar, repetidamente. É a forma de todos os ciclos do código.
+- **[Máquinas de estados (Moore e Mealy)](https://balbertini.github.io/fsmbasics-pt_BR.html)** — *artigo · PT-BR · B. Albertini (USP).* Estados e transições, e a diferença Moore vs Mealy. O nosso software é uma máquina de Moore.
+- **Programação baseada em comandos** — *só em inglês · sem versão em português.* Vê a versão em inglês (WPILib / NextFTC).
+- **[Controlo em malha fechada (PID)](https://www.youtube.com/watch?v=9BFseQLw2-k)** — *vídeo · PT-BR · YouTube.* Corrigir o erro até ao valor desejado. É como o lançador mantém a rotação do volante.
+- **[Feedforward (controlo antecipatório)](https://www.youtube.com/watch?v=ih6fHuBC6XI)** — *vídeo · PT-BR · YouTube.* Prever a saída necessária em vez de só reagir ao erro: o "F" do PIDF.
+- **[Odometria e localização](https://docs.stemos.com.br/books/utilizando-o-imu)** + **[Insper](https://insper.github.io/robotica-computacional/modulos/03-laser-e-robo/atividades/3-odometria/)** — *documentação · PT-BR · stemOS · Insper.* Como o robô sabe onde está, a partir dos encoders e do IMU.
+- **[Cinemática Mecanum](https://docs.stemos.com.br/books/programando-uma-mecanum/page/cinematica-da-mecanum)** — *documentação · PT-BR · stemOS.* Como as quatro rodas de roletes combinam para andar em frente, deslizar e rodar.
 
 ---
 

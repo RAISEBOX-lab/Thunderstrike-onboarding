@@ -1,0 +1,854 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Software Onboarding — ThunderStrike #33535</title>
+<style>
+  :root {
+    /* Cool steel neutrals + a single warm "strike" amber accent */
+    --ground: #eef1f5;
+    --surface: #ffffff;
+    --surface-2: #f6f8fb;
+    --ink: #1a2028;
+    --ink-soft: #414b58;
+    --muted: #697585;
+    --hairline: #d8dee7;
+    --hairline-strong: #c3ccd8;
+    --accent: #c9791a;      /* strike amber, tuned for contrast on light */
+    --accent-soft: #f2e3cf;
+    --link: #235b8c;
+    --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --font-mono: ui-monospace, "SF Mono", "Cascadia Code", "JetBrains Mono", Menlo, Consolas, monospace;
+    --maxw: 940px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --ground: #0e1217;
+      --surface: #161b22;
+      --surface-2: #1b222b;
+      --ink: #e7ecf3;
+      --ink-soft: #b9c3cf;
+      --muted: #8593a3;
+      --hairline: #29313c;
+      --hairline-strong: #384252;
+      --accent: #f0b552;
+      --accent-soft: #3a2f1c;
+      --link: #7db4e6;
+    }
+  }
+  :root[data-theme="light"] {
+    --ground: #eef1f5; --surface: #ffffff; --surface-2: #f6f8fb;
+    --ink: #1a2028; --ink-soft: #414b58; --muted: #697585;
+    --hairline: #d8dee7; --hairline-strong: #c3ccd8;
+    --accent: #c9791a; --accent-soft: #f2e3cf; --link: #235b8c;
+  }
+  :root[data-theme="dark"] {
+    --ground: #0e1217; --surface: #161b22; --surface-2: #1b222b;
+    --ink: #e7ecf3; --ink-soft: #b9c3cf; --muted: #8593a3;
+    --hairline: #29313c; --hairline-strong: #384252;
+    --accent: #f0b552; --accent-soft: #3a2f1c; --link: #7db4e6;
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 17px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 24px 96px; }
+
+  /* ---- Masthead ---- */
+  header.mast {
+    border-top: 3px solid var(--accent);
+    background: var(--surface);
+    border-bottom: 1px solid var(--hairline);
+  }
+  .mast-inner { max-width: var(--maxw); margin: 0 auto; padding: 40px 24px 34px; }
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0 0 14px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .eyebrow .bolt { font-size: 14px; }
+  h1 {
+    font-size: clamp(30px, 5vw, 44px);
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    font-weight: 800;
+    margin: 0 0 12px;
+    text-wrap: balance;
+  }
+  .lede {
+    font-size: 18px;
+    color: var(--ink-soft);
+    max-width: 62ch;
+    margin: 0 0 26px;
+  }
+  .facts {
+    display: flex; flex-wrap: wrap; gap: 12px;
+    border-top: 1px solid var(--hairline);
+    padding-top: 20px;
+  }
+  .fact {
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    background: var(--surface-2);
+    border: 1px solid var(--hairline);
+    border-radius: 6px;
+    padding: 7px 11px;
+  }
+  .fact b { color: var(--ink); font-weight: 700; }
+
+  /* ---- How to use ---- */
+  .note {
+    margin: 34px 0 8px;
+    padding: 18px 20px;
+    background: var(--surface-2);
+    border: 1px solid var(--hairline);
+    border-left: 3px solid var(--accent);
+    border-radius: 8px;
+    color: var(--ink-soft);
+    font-size: 15.5px;
+  }
+  .note b { color: var(--ink); }
+
+  .legend {
+    display: flex; flex-wrap: wrap; gap: 18px;
+    margin: 22px 2px 6px;
+    font-size: 13.5px; color: var(--muted);
+    align-items: center;
+  }
+  .legend .tag { margin-right: 6px; }
+
+  /* ---- Track tags ---- */
+  .tag {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 999px;
+    border: 1px solid var(--hairline-strong);
+    color: var(--muted);
+    white-space: nowrap;
+  }
+  .tag.core { color: var(--accent); border-color: var(--accent); background: var(--accent-soft); }
+  .tag.parallel { color: var(--link); border-color: var(--link); }
+
+  /* ---- Section heading ---- */
+  h2.sec {
+    font-size: 14px;
+    font-family: var(--font-mono);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 54px 0 4px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--hairline);
+  }
+
+  /* ---- Phase ---- */
+  .phase {
+    display: grid;
+    grid-template-columns: 64px 1fr;
+    gap: 22px;
+    padding: 30px 0;
+    border-bottom: 1px solid var(--hairline);
+  }
+  .phase-num {
+    font-family: var(--font-mono);
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--accent);
+    padding-top: 4px;
+    line-height: 1.2;
+  }
+  .phase-num .lab { display:block; font-size: 10px; letter-spacing:0.14em; color: var(--muted); font-weight:600; margin-bottom: 3px; }
+  .phase-head {
+    display: flex; align-items: baseline; flex-wrap: wrap; gap: 10px 14px;
+    margin-bottom: 6px;
+  }
+  .phase-head h3 {
+    font-size: 22px; font-weight: 750; letter-spacing: -0.01em;
+    margin: 0; line-height: 1.2;
+  }
+  .dur {
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    color: var(--muted);
+  }
+  .goal { color: var(--ink-soft); margin: 4px 0 16px; max-width: 66ch; }
+
+  /* ---- Resource list ---- */
+  ul.res { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px; }
+  ul.res li {
+    padding: 12px 0;
+    border-top: 1px solid var(--hairline);
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 4px 16px;
+    align-items: baseline;
+  }
+  ul.res li:first-child { border-top: none; }
+  .res-title { font-weight: 600; }
+  .res-title a { color: var(--link); text-decoration: none; border-bottom: 1px solid transparent; }
+  .res-title a:hover { border-bottom-color: var(--link); }
+  .res-title a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
+  .res-meta {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--muted);
+    white-space: nowrap;
+    text-align: right;
+  }
+  .res-sub {
+    grid-column: 1 / -1;
+    font-size: 14px;
+    color: var(--muted);
+    margin-top: 1px;
+  }
+  .res-sub .prov { color: var(--ink-soft); font-weight: 600; }
+
+  .robotbox {
+    margin-top: 16px;
+    background: var(--surface-2);
+    border: 1px solid var(--hairline);
+    border-radius: 8px;
+    padding: 13px 16px;
+    font-size: 14.5px;
+    color: var(--ink-soft);
+  }
+  .robotbox .h {
+    font-family: var(--font-mono);
+    font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--accent); display:block; margin-bottom: 5px;
+  }
+  code {
+    font-family: var(--font-mono);
+    font-size: 0.86em;
+    background: var(--surface);
+    border: 1px solid var(--hairline);
+    border-radius: 4px;
+    padding: 1px 5px;
+    color: var(--ink);
+  }
+  @media (prefers-color-scheme: dark) { code { background: #0e1217; } }
+  :root[data-theme="dark"] code { background: #0e1217; }
+  :root[data-theme="light"] code { background: var(--surface); }
+
+  /* ---- Missing / gaps ---- */
+  .gaps { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-top: 22px; }
+  .gap {
+    background: var(--surface);
+    border: 1px solid var(--hairline);
+    border-radius: 10px;
+    padding: 16px 17px;
+  }
+  .gap .gnum {
+    font-family: var(--font-mono);
+    font-size: 12px; color: var(--accent); font-weight: 700;
+    margin-bottom: 7px;
+  }
+  .gap h4 { margin: 0 0 5px; font-size: 16px; font-weight: 700; letter-spacing: -0.01em; }
+  .gap p { margin: 0; font-size: 14px; color: var(--ink-soft); line-height: 1.5; }
+
+  footer {
+    margin-top: 40px;
+    padding-top: 22px;
+    border-top: 1px solid var(--hairline);
+    font-size: 13.5px;
+    color: var(--muted);
+  }
+  a { color: var(--link); }
+
+  @media (max-width: 620px) {
+    body { font-size: 16px; }
+    .phase { grid-template-columns: 1fr; gap: 8px; }
+    .phase-num { padding-top: 0; }
+    .gaps { grid-template-columns: 1fr; }
+    ul.res li { grid-template-columns: 1fr; }
+    .res-meta { text-align: left; }
+  }
+</style>
+</head>
+<body>
+<header class="mast">
+  <div class="mast-inner">
+    <p class="eyebrow"><span class="bolt">⚡</span> ThunderStrike FTC&nbsp;#33535</p>
+    <h1>Software Engineer Onboarding</h1>
+    <p class="lede">A ground-zero path to a productive contributor on the team's robot control software — from no programming at all to opening your first reviewed pull request. Every resource below is free and current.</p>
+    <div class="facts">
+      <span class="fact"><b>Start point:</b> little/no coding</span>
+      <span class="fact"><b>Target:</b> ship a reviewed PR</span>
+      <span class="fact"><b>Pace:</b> ~6 weeks part-time</span>
+      <span class="fact"><b>Cost:</b> $0 — all free</span>
+      <span class="fact"><b>Stack:</b> Java 8 · Android · FTC SDK</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <p class="note"><b>How to use this.</b> Work the phases in order — each assumes the one before it. The Git track runs in parallel: start it in Week&nbsp;2 and use it for everything after. You are not expected to master a topic before moving on; you are expected to be able to <i>follow along</i> in the codebase. Pair with your assigned mentor early and often. On-robot testing is done by the Product Owner — your loop is write, build, get reviewed.<br><br><strong>Ainda a aprender inglês?</strong> Há uma <a href="#pt">Trilha em Português</a> mais abaixo.</p>
+
+  <div class="legend">
+    <span><span class="tag core">Core</span> the main sequence</span>
+    <span><span class="tag parallel">Parallel</span> runs alongside the core</span>
+  </div>
+
+  <h2 class="sec">The Path</h2>
+
+  <!-- PHASE 0 -->
+  <section class="phase">
+    <div class="phase-num"><span class="lab">PHASE</span>00</div>
+    <div>
+      <div class="phase-head">
+        <h3>Setup &amp; Orientation</h3>
+        <span class="dur">Day 1 · ~2–3h</span>
+        <span class="tag core">Core</span>
+      </div>
+      <p class="goal">Get accounts, tools, and the repository on your machine — and read where you've landed. Do not write code yet; just get everything opening cleanly.</p>
+      <ul class="res">
+        <li>
+          <span class="res-title">Create a GitHub account &amp; get invited to the team</span>
+          <span class="res-meta">setup · 15m</span>
+          <span class="res-sub"><span class="prov">GitHub</span> — your identity for every change you make.</span>
+        </li>
+        <li>
+          <span class="res-title">Install the toolchain: JDK, Android Studio, Git</span>
+          <span class="res-meta">setup · 1–2h</span>
+          <span class="res-sub"><span class="prov">Local</span> — follow the <a href="https://ftc-docs.firstinspires.org/en/latest/programming_resources/tutorial_specific/android_studio/installing_android_studio/Installing-Android-Studio.html" target="_blank" rel="noopener">FTC "Installing Android Studio" guide</a> (it pairs Studio with the right JDK), or the <a href="https://developer.android.com/studio/install" target="_blank" rel="noopener">official Android Studio install guide</a>. Then clone the repo, open it in Android Studio, and let Gradle finish syncing once.</span>
+        </li>
+        <li>
+          <span class="res-title">Read the team README and Engineering Process</span>
+          <span class="res-meta">read · 45m</span>
+          <span class="res-sub"><span class="prov">In-repo</span> — <code>README.md</code> and <code>doc/engineering-process.md</code>. Orientation only; don't try to absorb it all.</span>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- PHASE 1 -->
+  <section class="phase">
+    <div class="phase-num"><span class="lab">PHASE</span>01</div>
+    <div>
+      <div class="phase-head">
+        <h3>Programming Foundations</h3>
+        <span class="dur">Week 1 · ~8–12h</span>
+        <span class="tag core">Core</span>
+      </div>
+      <p class="goal">Learn what a program <i>is</i> — variables, conditionals, loops, functions — in a low-noise language before Java's syntax piles on. These ideas transfer directly.</p>
+      <ul class="res">
+        <li>
+          <span class="res-title"><a href="https://www.khanacademy.org/computing/intro-to-python-fundamentals" target="_blank" rel="noopener">Intro to Python Fundamentals</a></span>
+          <span class="res-meta">interactive · self-paced</span>
+          <span class="res-sub"><span class="prov">Khan Academy</span> — runs in the browser, zero setup, assumes no experience. Python teaches the concepts cleanly; you'll switch to Java next.</span>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- PHASE 2 -->
+  <section class="phase">
+    <div class="phase-num"><span class="lab">PHASE</span>02</div>
+    <div>
+      <div class="phase-head">
+        <h3>Java &amp; Object-Oriented Programming</h3>
+        <span class="dur">Weeks 2–3 · ~20–25h</span>
+        <span class="tag core">Core</span>
+      </div>
+      <p class="goal">The whole codebase is Java. Learn the language, then the object-oriented model (classes, objects, inheritance, interfaces, polymorphism) — this is the single most important phase.</p>
+      <ul class="res">
+        <li>
+          <span class="res-title"><a href="https://youtu.be/A74TOX803D0" target="_blank" rel="noopener">Learn Java Programming (v17)</a></span>
+          <span class="res-meta">video · 4h</span>
+          <span class="res-sub"><span class="prov">freeCodeCamp</span> — one sitting, no signup: variables through arrays, ending in OOP. Watch first.</span>
+        </li>
+        <li>
+          <span class="res-title"><a href="https://www.codecademy.com/learn/learn-java" target="_blank" rel="noopener">Learn Java</a></span>
+          <span class="res-meta">interactive · ~17h</span>
+          <span class="res-sub"><span class="prov">Codecademy (free course)</span> — hands-on; the OOP unit has you write your own classes, which is where it sticks. Ignore the Pro upsell.</span>
+        </li>
+        <li>
+          <span class="res-title"><a href="https://raw.githubusercontent.com/alan412/LearnJavaForFTC/master/LearnJavaForFTC.pdf" target="_blank" rel="noopener">Learn Java for FTC</a> (free PDF — direct download)</span>
+          <span class="res-meta">book · self-paced</span>
+          <span class="res-sub"><span class="prov">Alan G. Smith</span> — the bridge: Java taught through motors, servos, sensors, gamepads, and OpModes. Read as you enter Phase 5.</span>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- PHASE 3 (parallel) -->
+  <section class="phase">
+    <div class="phase-num"><span class="lab">PHASE</span>03</div>
+    <div>
+      <div class="phase-head">
+        <h3>Git &amp; GitHub</h3>
+        <span class="dur">From Week 2 · ~3–4h</span>
+        <span class="tag parallel">Parallel</span>
+      </div>
+      <p class="goal">Version control and the pull-request workflow — how every change on this team is made, reviewed, and merged. Start alongside Java; you'll use it for the rest of your time here.</p>
+      <ul class="res">
+        <li>
+          <span class="res-title"><a href="https://github.com/skills/introduction-to-github" target="_blank" rel="noopener">Introduction to GitHub</a></span>
+          <span class="res-meta">interactive · &lt;1h</span>
+          <span class="res-sub"><span class="prov">GitHub Skills (official)</span> — learn repos, branches, commits, and opening a PR by doing it in a real repo. Best starting point.</span>
+        </li>
+        <li>
+          <span class="res-title"><a href="https://github.com/skills/review-pull-requests" target="_blank" rel="noopener">Review Pull Requests</a></span>
+          <span class="res-meta">interactive · &lt;30m</span>
+          <span class="res-sub"><span class="prov">GitHub Skills (official)</span> — requesting a review, suggesting changes, approving — the collaboration half of PRs.</span>
+        </li>
+        <li>
+          <span class="res-title"><a href="https://github.com/skills/resolve-merge-conflicts" target="_blank" rel="noopener">Resolve Merge Conflicts</a></span>
+          <span class="res-meta">interactive · &lt;30m</span>
+          <span class="res-sub"><span class="prov">GitHub Skills (official)</span> — what causes conflicts and how to fix them without fear.</span>
+        </li>
+        <li>
+          <span class="res-title">Read the team Git Protocol</span>
+          <span class="res-meta">read · 30m</span>
+          <span class="res-sub"><span class="prov">In-repo</span> — <code>.claude/skills/git-protocol</code>. Our branch naming, commit, and PR rules. Follow it exactly.</span>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- PHASE 4 -->
+  <section class="phase">
+    <div class="phase-num"><span class="lab">PHASE</span>04</div>
+    <div>
+      <div class="phase-head">
+        <h3>Android Studio, Deploying &amp; Debugging</h3>
+        <span class="dur">Weeks 3–4 · ~8–10h</span>
+        <span class="tag core">Core</span>
+      </div>
+      <p class="goal">The robot code is a Java Android app. Learn the editor, build and install the APK onto the Control Hub, connect over ADB, read the logs when something breaks, and watch live data on the dashboard.</p>
+      <ul class="res">
+        <li>
+          <span class="res-title"><a href="https://ftc-docs.firstinspires.org/en/latest/programming_resources/tutorial_specific/android_studio/creating_op_modes/Creating-and-Running-an-Op-Mode-(Android-Studio).html" target="_blank" rel="noopener">Creating and Running an OpMode</a></span>
+          <span class="res-meta">docs · ~30m</span>
+          <span class="res-sub"><span class="prov">FTC (official) · Java</span> — Studio is already installed and synced from Phase 0; here you open the robot project, then create, build, and install your first OpMode APK to the Robot Controller.</span>
+        </li>
+        <li>
+          <span class="res-title"><a href="https://gm0.org/en/latest/docs/software/getting-started/using-android-studio.html" target="_blank" rel="noopener">Using Android Studio</a></span>
+          <span class="res-meta">guide · ~20m</span>
+          <span class="res-sub"><span class="prov">gm0 · Java</span> — the IDE layout, the Gradle build, deploying to the Control Hub over USB or wireless, and a first look at ADB and logcat.</span>
+        </li>
+        <li>
+          <span class="res-title"><a href="https://developer.android.com/studio/run" target="_blank" rel="noopener">Build and run your app</a></span>
+          <span class="res-meta">docs · reference</span>
+          <span class="res-sub"><span class="prov">Android (official)</span> — language-neutral reference for what the Run button does and where the built APK lands.</span>
+        </li>
+        <li>
+          <span class="res-title"><a href="https://docs.gradle.org/current/userguide/getting_started.html" target="_blank" rel="noopener">Gradle — Getting Started</a></span>
+          <span class="res-meta">docs · ~1h</span>
+          <span class="res-sub"><span class="prov">Gradle (official)</span> — what Gradle is, plus tasks, dependencies, and the <code>./gradlew</code> wrapper. This is the tool behind <code>assembleDebug</code>; our build files are Groovy <code>.gradle</code> (<code>build.dependencies.gradle</code> and <code>TeamCode/build.gradle</code>).</span>
+        </li>
+        <li>
+          <span class="res-title"><a href="https://ftc-docs.firstinspires.org/en/latest/programming_resources/shared/managing_control_hub/Managing-a-Control-Hub.html" target="_blank" rel="noopener">Managing a Control Hub</a> — wireless ADB</span>
+          <span class="res-meta">docs · ~15m</span>
+          <span class="res-sub"><span class="prov">FTC (official)</span> — the authoritative steps to reach the Control Hub over Wi-Fi so you can deploy and pull logs without a cable.</span>
+        </li>
+        <li>
+          <span class="res-title"><a href="https://developer.android.com/tools/adb" target="_blank" rel="noopener">Android Debug Bridge (adb)</a></span>
+          <span class="res-meta">reference · ~30m</span>
+          <span class="res-sub"><span class="prov">Android (official)</span> — the command reference: <code>adb connect</code>, <code>adb devices</code>, and <code>adb pull</code> to copy DataLogger CSV files off the hub.</span>
+        </li>
+        <li>
+          <span class="res-title"><a href="https://gm0.org/en/latest/docs/software/getting-started/common-issues.html" target="_blank" rel="noopener">Common Issues</a> + <a href="https://developer.android.com/tools/logcat" target="_blank" rel="noopener">Logcat</a></span>
+          <span class="res-meta">guide + reference</span>
+          <span class="res-sub"><span class="prov">gm0 · Android (official)</span> — read a crash log and stack trace by example, then the definitive logcat reference for filtering the crash buffer.</span>
+        </li>
+        <li>
+          <span class="res-title"><a href="https://acmerobotics.github.io/ftc-dashboard/gettingstarted.html" target="_blank" rel="noopener">FTC Dashboard — Getting Started</a> + <a href="https://acmerobotics.github.io/ftc-dashboard/features.html" target="_blank" rel="noopener">Features</a></span>
+          <span class="res-meta">docs · ~30m</span>
+          <span class="res-sub"><span class="prov">ACME Robotics</span> — connect in a browser, then plot values over time, draw the field overlay, and tune <code>@Config</code> parameters live.</span>
+        </li>
+        <li>
+          <span class="res-title"><a href="https://ftcontrol.bylazar.com/docs/panels/telemetry/" target="_blank" rel="noopener">Panels — Telemetry</a></span>
+          <span class="res-meta">docs · ~20m</span>
+          <span class="res-sub"><span class="prov">Bylazar</span> — our advanced dashboard: field view, telemetry, and live graphing. Read after FTC Dashboard.</span>
+        </li>
+      </ul>
+      <div class="robotbox">
+        <span class="h">On our robot</span>
+        We build with <code>./gradlew assembleDebug</code> and deploy the APK to the REV Control Hub. Pull logs with <code>adb</code>; watch live data on FTC Dashboard (port 8080) and Panels (port 8001). You'll learn our exact flow with your mentor once you can build cleanly.
+      </div>
+    </div>
+  </section>
+
+  <!-- PHASE 5 -->
+  <section class="phase">
+    <div class="phase-num"><span class="lab">PHASE</span>05</div>
+    <div>
+      <div class="phase-head">
+        <h3>The FTC Robotics Stack</h3>
+        <span class="dur">Weeks 4–5 · ~10–15h</span>
+        <span class="tag core">Core</span>
+      </div>
+      <p class="goal">Now the domain: how FTC robot code is structured (OpModes, hardware mapping, gamepads) and the two libraries this robot relies on for autonomous movement.</p>
+      <ul class="res">
+        <li>
+          <span class="res-title"><a href="https://gm0.org/en/latest/" target="_blank" rel="noopener">Game Manual 0 — Software</a></span>
+          <span class="res-meta">tutorials · ~1–2h</span>
+          <span class="res-sub"><span class="prov">gm0 (community)</span> — the most-recommended free FTC learning resource. Start with the "Getting Started" software pages.</span>
+        </li>
+        <li>
+          <span class="res-title"><a href="https://ftc-docs.firstinspires.org/en/latest/" target="_blank" rel="noopener">Official FTC Documentation</a></span>
+          <span class="res-meta">docs · reference</span>
+          <span class="res-sub"><span class="prov">FIRST (official)</span> — authoritative install + first-OpMode guide, always current for the active season.</span>
+        </li>
+        <li>
+          <span class="res-title"><a href="https://www.youtube.com/watch?v=fbSiZSnPf-U" target="_blank" rel="noopener">Getting Started Programming your FTC Robot in Java</a></span>
+          <span class="res-meta">video · intro</span>
+          <span class="res-sub"><span class="prov">YouTube</span> — a watch-along first OpMode if you prefer video before docs.</span>
+        </li>
+        <li>
+          <span class="res-title">Our hardware &amp; safety rules</span>
+          <span class="res-meta">read · 30m</span>
+          <span class="res-sub"><span class="prov">README § Wiring</span> — the wiring table that maps each motor and sensor name to a real port. Two rules: the names in code must match the Robot Configuration File exactly — renaming one breaks the robot — and you never run OpModes on the physical robot yourself; the Product Owner does that.</span>
+        </li>
+        <li>
+          <span class="res-title"><a href="https://www.youtube.com/watch?v=6v7QgzRhOwA" target="_blank" rel="noopener">Get Started with Pedro Pathing</a> + <a href="https://pedropathing.com/" target="_blank" rel="noopener">docs</a></span>
+          <span class="res-meta">video + docs</span>
+          <span class="res-sub"><span class="prov">Pedro Pathing</span> — our autonomous path-following library. The Nov 2025 setup video matches our version.</span>
+        </li>
+        <li>
+          <span class="res-title"><a href="https://nextftc.dev/guide/about" target="_blank" rel="noopener">NextFTC Guide</a></span>
+          <span class="res-meta">docs · ~1–2h</span>
+          <span class="res-sub"><span class="prov">NextFTC (official)</span> — our command-based library. Documentation-first (no video series yet); code-along in Java.</span>
+        </li>
+      </ul>
+      <div class="robotbox">
+        <span class="h">Our versions</span>
+        FTC SDK <code>11.1.0</code> · Pedro Pathing <code>2.0.5</code> · NextFTC <code>1.1.0</code>. When docs and our code disagree, our pinned version wins — read the source for the version we use.
+      </div>
+    </div>
+  </section>
+
+  <!-- PHASE 6 -->
+  <section class="phase">
+    <div class="phase-num"><span class="lab">PHASE</span>06</div>
+    <div>
+      <div class="phase-head">
+        <h3>Our Codebase &amp; First PR</h3>
+        <span class="dur">Weeks 5–6 · ongoing</span>
+        <span class="tag core">Core</span>
+      </div>
+      <p class="goal">Turn general knowledge into <i>this</i> robot. Learn how our software is organized, our rules, and then ship a small change end to end.</p>
+      <ul class="res">
+        <li>
+          <span class="res-title">Architecture: the control loop &amp; coordinate systems</span>
+          <span class="res-meta">read · 2h</span>
+          <span class="res-sub"><span class="prov">README § Software Architecture</span> — the 50&nbsp;Hz five-phase state-machine loop, the subsystems, and FTC (mm/degrees) vs Pedro (inches/radians) coordinates. You work in the newer NextFTC command-based, modular-subsystem code — each subsystem is its own class. An older single-file design still lives in the repo, but it's legacy; new work doesn't go there.</span>
+        </li>
+        <li>
+          <span class="res-title">Coding Conventions</span>
+          <span class="res-meta">read · 30m</span>
+          <span class="res-sub"><span class="prov">README § Coding Conventions</span> — no-allocation hot paths, no magic numbers, short single-purpose methods, comprehensive comments.</span>
+        </li>
+        <li>
+          <span class="res-title">Real-time constraints (advanced)</span>
+          <span class="res-meta">read · advanced</span>
+          <span class="res-sub"><span class="prov">README § Performance</span> — why we avoid creating objects and doing extra hub reads inside the ~50 Hz loop: object creation causes stutter-inducing garbage-collection pauses, and each hub read is a slow round-trip. Save this for after your first PR.</span>
+        </li>
+        <li>
+          <span class="res-title">The PBI lifecycle &amp; Definition of Done</span>
+          <span class="res-meta">read · 30m</span>
+          <span class="res-sub"><span class="prov">doc/engineering-process.md</span> — how work flows: code changes happen only in the Implementation stage; a PR isn't done until the PO accepts it.</span>
+        </li>
+        <li>
+          <span class="res-title">Running the unit tests</span>
+          <span class="res-meta">hands-on · 30m</span>
+          <span class="res-sub"><span class="prov">In-repo</span> — <code>./gradlew :TeamCode:testDebugUnitTest</code>. See <code>TeamCode/src/test/README.md</code> for the harness.</span>
+        </li>
+        <li>
+          <span class="res-title">Capstone — your first PBI</span>
+          <span class="res-meta">guided · 1 week</span>
+          <span class="res-sub"><span class="prov">With a mentor</span> — pick up a small starter task, branch, implement, get it reviewed, open a PR. This is the finish line.</span>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <h2 class="sec">Control Software Concepts</h2>
+  <p class="note">The ideas the codebase is built on. Dip into these while working through Phases 5–6 — they explain <i>why</i> the subsystems look the way they do. Video where a good one exists; two are best learned from short articles, and that's flagged.</p>
+
+  <ul class="res">
+    <li>
+      <span class="res-title"><a href="https://gm0.org/en/latest/docs/software/getting-started/linear-opmode-vs-opmode.html" target="_blank" rel="noopener">The control loop: sense → decide → act</a> + <a href="https://gameprogrammingpatterns.com/game-loop.html" target="_blank" rel="noopener">why it runs at a fixed rate</a></span>
+      <span class="res-meta">articles · ~20m</span>
+      <span class="res-sub"><span class="prov">gm0 · Game Programming Patterns</span> — read inputs, decide, then act, repeated ~50 times a second. No strong beginner video exists here, so it's text. This is the shape of every loop in the code.</span>
+    </li>
+    <li>
+      <span class="res-title"><a href="https://www.youtube.com/watch?v=sNFMdLEVxFo" target="_blank" rel="noopener">State machines</a> + <a href="https://www.youtube.com/watch?v=ublVFRXOdZo" target="_blank" rel="noopener">Mealy vs Moore</a></span>
+      <span class="res-meta">video · ~20m</span>
+      <span class="res-sub"><span class="prov">YouTube · Neso Academy</span> — states and transitions, then the Moore-vs-Mealy distinction. Our robot software is a Moore machine: outputs depend only on state.</span>
+    </li>
+    <li>
+      <span class="res-title"><a href="https://www.youtube.com/watch?v=VoxeXqy1bdQ" target="_blank" rel="noopener">Command-based programming</a> + <a href="https://docs.wpilib.org/en/stable/docs/software/commandbased/what-is-command-based.html" target="_blank" rel="noopener">WPILib explainer</a></span>
+      <span class="res-meta">video + docs</span>
+      <span class="res-sub"><span class="prov">FRC 0 to Autonomous · WPILib</span> — behavior organized into commands and subsystems that get scheduled, running in sequence or in parallel. The model behind our NextFTC library.</span>
+    </li>
+    <li>
+      <span class="res-title"><a href="https://www.youtube.com/watch?v=UR0hOmjaHp0" target="_blank" rel="noopener">Closed-loop control: PID</a></span>
+      <span class="res-meta">video · ~10m</span>
+      <span class="res-sub"><span class="prov">Brian Douglas</span> — correcting error toward a target, with almost no math. How the shooter holds a set flywheel speed.</span>
+    </li>
+    <li>
+      <span class="res-title"><a href="https://gm0.org/en/latest/docs/software/concepts/control-loops.html" target="_blank" rel="noopener">Feedforward (and PIDF)</a> + <a href="https://docs.wpilib.org/en/stable/docs/software/advanced-controls/introduction/tuning-flywheel.html" target="_blank" rel="noopener">flywheel example</a></span>
+      <span class="res-meta">docs · ~15m</span>
+      <span class="res-sub"><span class="prov">gm0 · WPILib</span> — predicting the output you need instead of only reacting to error: the "F" in the shooter's PIDF. gm0 covers PID and feedforward together, no calculus. No clean beginner video exists here.</span>
+    </li>
+    <li>
+      <span class="res-title"><a href="https://www.youtube.com/watch?v=ixsxDn_ddLE" target="_blank" rel="noopener">Odometry &amp; localization</a> + <a href="https://gm0.org/en/latest/docs/software/concepts/odometry.html" target="_blank" rel="noopener">gm0 concept page</a></span>
+      <span class="res-meta">video · ~10m</span>
+      <span class="res-sub"><span class="prov">The Clueless (FTC) · gm0</span> — how the robot tracks its position and heading from wheel encoders and the IMU. Our Pinpoint does this with sensor fusion.</span>
+    </li>
+    <li>
+      <span class="res-title"><a href="https://www.youtube.com/watch?v=noqBUEgyQ8A" target="_blank" rel="noopener">Mecanum kinematics</a> + <a href="https://gm0.org/en/latest/docs/common-mechanisms/drivetrains/holonomic.html" target="_blank" rel="noopener">gm0 holonomic drives</a></span>
+      <span class="res-meta">video · ~9m</span>
+      <span class="res-sub"><span class="prov">Lesics · gm0</span> — how four angled-roller wheels combine into forward, strafe, and turn. This is our drivetrain.</span>
+    </li>
+  </ul>
+
+  <h2 class="sec" id="pt">Trilha em Português</h2>
+  <p class="note">Quase todos os recursos estão em <strong>português do Brasil (PT-BR)</strong>: a pronúncia difere do português europeu, mas o conteúdo serve na perfeição. Nada aqui é uma tradução ou cópia dos materiais em inglês — são recursos já publicados em português. Onde não existe conteúdo em português, fica indicado que se deve usar a fase equivalente em inglês.</p>
+
+  <section class="phase">
+    <div class="phase-num"><span class="lab">FASE</span>00</div>
+    <div>
+      <div class="phase-head">
+        <h3>Preparação e Orientação</h3>
+        <span class="dur">Dia 1 · ~2–3h</span>
+        <span class="tag core">Base</span>
+      </div>
+      <p class="goal">Instala as ferramentas e abre o projeto — ainda sem escrever código.</p>
+      <ul class="res">
+        <li>
+          <span class="res-title"><a href="https://developer.android.com/studio/install?hl=pt-br" target="_blank" rel="noopener">Instalar o Android Studio</a></span>
+          <span class="res-meta">documentação · PT-BR</span>
+          <span class="res-sub"><span class="prov">Google (oficial)</span> — instalação passo a passo. O JDK e o Git aprendem-se nos cursos das fases seguintes.</span>
+        </li>
+        <li>
+          <span class="res-title">Ler o README e o processo de engenharia da equipa</span>
+          <span class="res-meta">leitura · em inglês</span>
+          <span class="res-sub"><span class="prov">No repositório</span> — estes documentos da equipa só existem em inglês; usa a Fase 0 em inglês.</span>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="phase">
+    <div class="phase-num"><span class="lab">FASE</span>01</div>
+    <div>
+      <div class="phase-head">
+        <h3>Fundamentos de Programação</h3>
+        <span class="dur">Semana 1 · ~8–12h</span>
+        <span class="tag core">Base</span>
+      </div>
+      <p class="goal">O que é um programa — variáveis, condições, ciclos e funções — numa linguagem simples.</p>
+      <ul class="res">
+        <li>
+          <span class="res-title"><a href="https://www.youtube.com/playlist?list=PLHz_AreHm4dkI2ZdjTwZA4mPMxWTfNSpR" target="_blank" rel="noopener">Java Básico</a></span>
+          <span class="res-meta">vídeo · PT-BR</span>
+          <span class="res-sub"><span class="prov">Curso em Vídeo</span> — a linguagem Java de raiz, ao mesmo ritmo tranquilo.</span>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="phase">
+    <div class="phase-num"><span class="lab">FASE</span>02</div>
+    <div>
+      <div class="phase-head">
+        <h3>Java e Programação Orientada a Objetos</h3>
+        <span class="dur">Semanas 2–3 · ~20–25h</span>
+        <span class="tag core">Base</span>
+      </div>
+      <p class="goal">Todo o código é Java. Aprende a linguagem e depois o modelo de objetos.</p>
+      <ul class="res">
+        <li>
+          <span class="res-title"><a href="https://www.youtube.com/playlist?list=PLHz_AreHm4dkqe2aR0tQK74m8SFe-aGsY" target="_blank" rel="noopener">Java — Programação Orientada a Objetos</a></span>
+          <span class="res-meta">vídeo · PT-BR</span>
+          <span class="res-sub"><span class="prov">Curso em Vídeo</span> — classes, objetos, herança e polimorfismo.</span>
+        </li>
+        <li>
+          <span class="res-title"><a href="https://www.freecodecamp.org/portuguese/learn" target="_blank" rel="noopener">freeCodeCamp em Português</a></span>
+          <span class="res-meta">interativo · PT-BR</span>
+          <span class="res-sub"><span class="prov">freeCodeCamp</span> — exercícios práticos no navegador.</span>
+        </li>
+        <li>
+          <span class="res-title"><a href="https://raw.githubusercontent.com/alan412/LearnJavaForFTC/master/LearnJavaForFTC.pdf" target="_blank" rel="noopener">Learn Java for FTC</a> (PDF grátis)</span>
+          <span class="res-meta">livro · ao teu ritmo</span>
+          <span class="res-sub"><span class="prov">Alan G. Smith</span> — a ponte: Java através de motores, servos, sensores, gamepad e OpModes. Só existe em inglês e não o podemos traduzir nem republicar; para estudo pessoal, transfere o PDF e envia-o ao tradutor de documentos do <a href="https://translate.google.com" target="_blank" rel="noopener">Google Tradutor</a> (translate.google.com → Documentos).</span>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="phase">
+    <div class="phase-num"><span class="lab">FASE</span>03</div>
+    <div>
+      <div class="phase-head">
+        <h3>Git e GitHub</h3>
+        <span class="dur">A partir da Semana 2 · ~3–4h</span>
+        <span class="tag parallel">Paralelo</span>
+      </div>
+      <p class="goal">Controlo de versões e o fluxo de pull request — como a equipa faz cada alteração.</p>
+      <ul class="res">
+        <li>
+          <span class="res-title"><a href="https://www.cursoemvideo.com/curso/curso-de-git-e-github/" target="_blank" rel="noopener">Git e GitHub</a></span>
+          <span class="res-meta">vídeo · PT-BR</span>
+          <span class="res-sub"><span class="prov">Curso em Vídeo (Gustavo Guanabara)</span> — repositórios, commits, ramos, push/clone e pull requests.</span>
+        </li>
+        <li>
+          <span class="res-title"><a href="https://learn.microsoft.com/pt-pt/training/github/" target="_blank" rel="noopener">Fundamentos do GitHub</a></span>
+          <span class="res-meta">interativo · PT-PT</span>
+          <span class="res-sub"><span class="prov">Microsoft Learn</span> — a única opção em português europeu (tradução automática), mas atual e gratuita.</span>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="phase">
+    <div class="phase-num"><span class="lab">FASE</span>04</div>
+    <div>
+      <div class="phase-head">
+        <h3>Android Studio, Implantação e Depuração</h3>
+        <span class="dur">Semanas 3–4 · ~8–10h</span>
+        <span class="tag core">Base</span>
+      </div>
+      <p class="goal">Compilar o código, enviá-lo para o Control Hub e ler os registos quando algo falha.</p>
+      <ul class="res">
+        <li>
+          <span class="res-title"><a href="https://www.youtube.com/watch?v=uX6Ezf73OEY" target="_blank" rel="noopener">Começando com o Gradle</a></span>
+          <span class="res-meta">vídeo · PT-BR</span>
+          <span class="res-sub"><span class="prov">Alura</span> — o que é o Gradle: tarefas e comandos básicos (por trás do <code>assembleDebug</code>).</span>
+        </li>
+        <li>
+          <span class="res-title"><a href="https://docs.stemos.com.br/books/control-hub/page/conexao-ao-console-de-controlador-do-robo" target="_blank" rel="noopener">Ligar ao Control Hub</a></span>
+          <span class="res-meta">documentação · PT-BR</span>
+          <span class="res-sub"><span class="prov">stemOS</span> — ligar o computador ao Control Hub por USB e por Wi-Fi.</span>
+        </li>
+        <li>
+          <span class="res-title"><a href="https://developer.android.com/studio/debug/am-logcat.html?hl=pt-br" target="_blank" rel="noopener">Ler registos com o Logcat</a></span>
+          <span class="res-meta">documentação · PT-BR</span>
+          <span class="res-sub"><span class="prov">Google (oficial)</span> — abrir o Logcat, ler entradas e rastreios de erro, filtrar por nível.</span>
+        </li>
+        <li>
+          <span class="res-title">ADB da FTC e FTC Dashboard</span>
+          <span class="res-meta">só em inglês</span>
+          <span class="res-sub"><span class="prov">Sem versão em português</span> — para o ADB específico da FTC e para o Dashboard, usa a Fase 4 em inglês.</span>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="phase">
+    <div class="phase-num"><span class="lab">FASE</span>05</div>
+    <div>
+      <div class="phase-head">
+        <h3>O Stack de Robótica da FTC</h3>
+        <span class="dur">Semanas 4–5 · ~10–15h</span>
+        <span class="tag core">Base</span>
+      </div>
+      <p class="goal">Como o código da FTC se organiza (OpModes, hardware, gamepad) e as bibliotecas do robô.</p>
+      <ul class="res">
+        <li>
+          <span class="res-title"><a href="https://raw.githubusercontent.com/alan412/LearnJavaForFTC/master/LearnJavaForFTC.pdf" target="_blank" rel="noopener">Learn Java for FTC</a> (PDF grátis)</span>
+          <span class="res-meta">livro · ao teu ritmo</span>
+          <span class="res-sub"><span class="prov">Alan G. Smith</span> — programação da FTC em Java: motores, servos, sensores, gamepad e OpModes. Só existe em inglês e não o podemos traduzir nem republicar; para estudo pessoal, transfere o PDF e envia-o ao tradutor de documentos do <a href="https://translate.google.com" target="_blank" rel="noopener">Google Tradutor</a> (translate.google.com → Documentos).</span>
+        </li>
+        <li>
+          <span class="res-title"><a href="https://www.youtube.com/stemOS" target="_blank" rel="noopener">stemOS no YouTube</a></span>
+          <span class="res-meta">vídeo · PT-BR</span>
+          <span class="res-sub"><span class="prov">stemOS</span> — vídeos sobre o sistema de controlo e o hardware da FTC.</span>
+        </li>
+        <li>
+          <span class="res-title">Pedro Pathing, NextFTC e Game Manual 0</span>
+          <span class="res-meta">só em inglês</span>
+          <span class="res-sub"><span class="prov">Sem versão em português</span> — para estes, usa a Fase 5 em inglês.</span>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="phase">
+    <div class="phase-num"><span class="lab">FASE</span>06</div>
+    <div>
+      <div class="phase-head">
+        <h3>O Nosso Código e o Primeiro PR</h3>
+        <span class="dur">Semanas 5–6 · contínuo</span>
+        <span class="tag core">Base</span>
+      </div>
+      <p class="goal">Arquitetura, convenções, testes e o teu primeiro pull request, com o teu mentor.</p>
+      <ul class="res">
+        <li>
+          <span class="res-title">O nosso código e documentos da equipa</span>
+          <span class="res-meta">só em inglês</span>
+          <span class="res-sub"><span class="prov">No repositório</span> — todo o material desta fase é o nosso código e está em inglês; segue a Fase 6 em inglês com o teu mentor.</span>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <p style="font-family:var(--font-mono);font-size:13px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin:44px 0 4px;padding-bottom:8px;border-bottom:1px solid var(--hairline);">Conceitos de Software de Controlo</p>
+  <p class="note">Os conceitos por trás do código. Onde não existe recurso em português, fica indicado que se deve usar a versão em inglês.</p>
+
+  <ul class="res">
+    <li>
+      <span class="res-title"><a href="https://escolalbk.com.br/glossario/o-que-e-loop-de-controle/" target="_blank" rel="noopener">O loop de controlo: sentir → decidir → agir</a></span>
+      <span class="res-meta">artigo · PT-BR</span>
+      <span class="res-sub"><span class="prov">Escola LBK</span> — ler sensores, decidir e depois atuar, repetidamente. É a forma de todos os ciclos do código.</span>
+    </li>
+    <li>
+      <span class="res-title"><a href="https://balbertini.github.io/fsmbasics-pt_BR.html" target="_blank" rel="noopener">Máquinas de estados (Moore e Mealy)</a></span>
+      <span class="res-meta">artigo · PT-BR</span>
+      <span class="res-sub"><span class="prov">B. Albertini (USP)</span> — estados e transições, e a diferença Moore vs Mealy. O nosso software é uma máquina de Moore.</span>
+    </li>
+    <li>
+      <span class="res-title">Programação baseada em comandos</span>
+      <span class="res-meta">só em inglês</span>
+      <span class="res-sub"><span class="prov">Sem versão em português</span> — vê a versão em inglês (WPILib / NextFTC).</span>
+    </li>
+    <li>
+      <span class="res-title"><a href="https://www.youtube.com/watch?v=9BFseQLw2-k" target="_blank" rel="noopener">Controlo em malha fechada (PID)</a></span>
+      <span class="res-meta">vídeo · PT-BR</span>
+      <span class="res-sub"><span class="prov">YouTube</span> — corrigir o erro até ao valor desejado. É como o lançador mantém a rotação do volante.</span>
+    </li>
+    <li>
+      <span class="res-title"><a href="https://www.youtube.com/watch?v=ih6fHuBC6XI" target="_blank" rel="noopener">Feedforward (controlo antecipatório)</a></span>
+      <span class="res-meta">vídeo · PT-BR</span>
+      <span class="res-sub"><span class="prov">YouTube</span> — prever a saída necessária em vez de só reagir ao erro: o "F" do PIDF.</span>
+    </li>
+    <li>
+      <span class="res-title"><a href="https://docs.stemos.com.br/books/utilizando-o-imu" target="_blank" rel="noopener">Odometria e localização</a> + <a href="https://insper.github.io/robotica-computacional/modulos/03-laser-e-robo/atividades/3-odometria/" target="_blank" rel="noopener">Insper</a></span>
+      <span class="res-meta">documentação · PT-BR</span>
+      <span class="res-sub"><span class="prov">stemOS · Insper</span> — como o robô sabe onde está, a partir dos encoders e do IMU.</span>
+    </li>
+    <li>
+      <span class="res-title"><a href="https://docs.stemos.com.br/books/programando-uma-mecanum/page/cinematica-da-mecanum" target="_blank" rel="noopener">Cinemática Mecanum</a></span>
+      <span class="res-meta">documentação · PT-BR</span>
+      <span class="res-sub"><span class="prov">stemOS</span> — como as quatro rodas de roletes combinam para andar em frente, deslizar e rodar.</span>
+    </li>
+  </ul>
+
+  <footer>
+    Timeline is a guide for part-time study, not a deadline — adjust to the person. All external courses were free and resolving when this program was assembled; re-check links each intake, especially any Udemy alternative, whose free status can change.
+  </footer>
+
+</div>
+</body>
+</html>

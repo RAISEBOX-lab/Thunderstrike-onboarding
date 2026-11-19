@@ -497,7 +497,7 @@
         <span class="dur">Weeks 4–5 · ~10–15h</span>
         <span class="tag core">Core</span>
       </div>
-      <p class="goal">Now the domain: how FTC robot code is structured (OpModes, hardware mapping, gamepads) and the two libraries this robot relies on for autonomous movement.</p>
+      <p class="goal">Now the domain: how FTC robot code is structured (OpModes, hardware mapping, gamepads) and the three libraries this robot relies on: path following, commands, and adaptive behaviour with developer tools.</p>
       <ul class="res">
         <li>
           <span class="res-title"><a href="https://gm0.org/en/latest/" target="_blank" rel="noopener">Game Manual 0 — Software</a></span>
@@ -520,19 +520,24 @@
           <span class="res-sub"><span class="prov">README § Wiring</span> — the wiring table that maps each motor and sensor name to a real port. Two rules: the names in code must match the Robot Configuration File exactly — renaming one breaks the robot — and you never run OpModes on the physical robot yourself; the Product Owner does that.</span>
         </li>
         <li>
-          <span class="res-title"><a href="https://www.youtube.com/watch?v=6v7QgzRhOwA" target="_blank" rel="noopener">Get Started with Pedro Pathing</a> + <a href="https://pedropathing.com/" target="_blank" rel="noopener">docs</a></span>
-          <span class="res-meta">video + docs</span>
-          <span class="res-sub"><span class="prov">Pedro Pathing</span> — our autonomous path-following library. The Nov 2025 setup video matches our version.</span>
+          <span class="res-title"><a href="https://pedropathing.com/" target="_blank" rel="noopener">Pedro Pathing 3 docs</a></span>
+          <span class="res-meta">docs</span>
+          <span class="res-sub"><span class="prov">Pedro Pathing</span>: our autonomous path-following library, version 3, with AutoTune for tuning the follower on the robot. Read the version 3 pages of the docs: our code follows Pedro 3.</span>
         </li>
         <li>
           <span class="res-title"><a href="https://nextftc.dev/guide/about" target="_blank" rel="noopener">NextFTC Guide</a></span>
           <span class="res-meta">docs · ~1–2h</span>
           <span class="res-sub"><span class="prov">NextFTC (official)</span> — our command-based library. Documentation-first (no video series yet); code-along in Java.</span>
         </li>
+        <li>
+          <span class="res-title"><a href="https://marrow.skeletonarmyftc.com" target="_blank" rel="noopener">Marrow</a> + <a href="https://github.com/Skeleton-Army/Marrow" target="_blank" rel="noopener">source</a></span>
+          <span class="res-meta">docs · ~1h</span>
+          <span class="res-sub"><span class="prov">Skeleton Army 23644 (MIT, Java)</span>: our adaptive-behaviour and developer-tools library: zones (polygon, circle, composite), retries, Weaver (path generation around obstacles, producing Pedro Pathing 3 paths), Prompter (pre-match choices on the Driver Station), HTML telemetry, Settings, auto bulk caching and an OpModeManager. It follows no paths itself and has no motor code.</span>
+        </li>
       </ul>
       <div class="robotbox">
         <span class="h">Our versions</span>
-        FTC SDK <code>11.1.0</code> · Pedro Pathing <code>2.0.5</code> · NextFTC <code>1.1.0</code>. When docs and our code disagree, our pinned version wins — read the source for the version we use.
+        FTC SDK <code>12.0.0</code> · Pedro Pathing <code>3.0.2</code> · NextFTC <code>1.1.0</code> · Marrow <code>1.2.2</code>. When docs and our code disagree, our pinned version wins — read the source for the version we use.
       </div>
     </div>
   </section>
@@ -777,7 +782,7 @@
           <span class="res-sub"><span class="prov">stemOS</span> — vídeos sobre o sistema de controlo e o hardware da FTC.</span>
         </li>
         <li>
-          <span class="res-title">Pedro Pathing, NextFTC e Game Manual 0</span>
+          <span class="res-title">Pedro Pathing 3, NextFTC, Marrow e Game Manual 0</span>
           <span class="res-meta">só em inglês</span>
           <span class="res-sub"><span class="prov">Sem versão em português</span> — para estes, usa a Fase 5 em inglês.</span>
         </li>

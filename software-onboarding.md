@@ -75,16 +75,17 @@ The robot code is a Java Android app. Learn the editor, build and install the AP
 ### Phase 5 — The FTC Robotics Stack
 *Weeks 4–5 · ~10–15h · Core*
 
-Now the domain: how FTC robot code is structured (OpModes, hardware mapping, gamepads) and the two libraries this robot relies on for autonomous movement.
+Now the domain: how FTC robot code is structured (OpModes, hardware mapping, gamepads) and the three libraries this robot relies on: path following, commands, and adaptive behaviour with developer tools.
 
 - **[Game Manual 0 — Software](https://gm0.org/en/latest/)** — *tutorials · ~1–2h · gm0 (community).* The most-recommended free FTC learning resource. Start with the "Getting Started" software pages.
 - **[Official FTC Documentation](https://ftc-docs.firstinspires.org/en/latest/)** — *docs · reference · FIRST (official).* Authoritative install + first-OpMode guide, always current for the active season.
 - **[Getting Started Programming your FTC Robot in Java](https://www.youtube.com/watch?v=fbSiZSnPf-U)** — *video · intro · YouTube.* A watch-along first OpMode if you prefer video before docs.
 - **Our hardware & safety rules** — *read · 30m · README § Wiring.* The wiring table that maps each motor and sensor name to a real port. Two rules: the names in code must match the Robot Configuration File exactly — renaming one breaks the robot — and you never run OpModes on the physical robot yourself; the Product Owner does that.
-- **[Get Started with Pedro Pathing](https://www.youtube.com/watch?v=6v7QgzRhOwA)** + **[docs](https://pedropathing.com/)** — *video + docs · Pedro Pathing.* Our autonomous path-following library. The Nov 2025 setup video matches our version.
+- **[Pedro Pathing 3 docs](https://pedropathing.com/)**: *docs · Pedro Pathing.* Our autonomous path-following library, version 3, with AutoTune for tuning the follower on the robot. Read the version 3 pages of the docs: our code follows Pedro 3.
 - **[NextFTC Guide](https://nextftc.dev/guide/about)** — *docs · ~1–2h · NextFTC (official).* Our command-based library. Documentation-first (no video series yet); code-along in Java.
+- **[Marrow](https://marrow.skeletonarmyftc.com)** + **[source](https://github.com/Skeleton-Army/Marrow)**: *docs · ~1h · Skeleton Army 23644 (MIT, Java).* Our adaptive-behaviour and developer-tools library: zones (polygon, circle, composite), retries, Weaver (path generation around obstacles, producing Pedro Pathing 3 paths), Prompter (pre-match choices on the Driver Station), HTML telemetry, Settings, auto bulk caching and an OpModeManager. It follows no paths itself and has no motor code.
 
-> **Our versions.** FTC SDK `11.1.0` · Pedro Pathing `2.0.5` · NextFTC `1.1.0`. When docs and our code disagree, our pinned version wins — read the source for the version we use.
+> **Our versions.** FTC SDK `12.0.0` · Pedro Pathing `3.0.2` · NextFTC `1.1.0` · Marrow `1.2.2`. When docs and our code disagree, our pinned version wins — read the source for the version we use.
 
 ### Phase 6 — Our Codebase & First PR
 *Weeks 5–6 · ongoing · Core*
@@ -167,7 +168,7 @@ Como o código da FTC se organiza (OpModes, hardware, gamepad) e as bibliotecas 
 
 - **[Learn Java for FTC](https://raw.githubusercontent.com/alan412/LearnJavaForFTC/master/LearnJavaForFTC.pdf)** *(PDF grátis)* — *livro · ao teu ritmo · Alan G. Smith.* Programação da FTC em Java: motores, servos, sensores, gamepad e OpModes. Só existe em inglês e não o podemos traduzir nem republicar; para estudo pessoal, transfere o PDF e envia-o ao tradutor de documentos do [Google Tradutor](https://translate.google.com) (translate.google.com → Documentos).
 - **[stemOS no YouTube](https://www.youtube.com/stemOS)** — *vídeo · PT-BR · stemOS.* Vídeos sobre o sistema de controlo e o hardware da FTC.
-- **Pedro Pathing, NextFTC e Game Manual 0** — *só em inglês · sem versão em português.* Para estes, usa a Fase 5 em inglês.
+- **Pedro Pathing 3, NextFTC, Marrow e Game Manual 0** — *só em inglês · sem versão em português.* Para estes, usa a Fase 5 em inglês.
 
 ### Fase 6 — O Nosso Código e o Primeiro PR
 *Semanas 5–6 · contínuo · Base*
